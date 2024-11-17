@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git credentialsId: 'your-github-credentials-id', url: 'https://github.com/<your-repo>.git'
+                git credentialsId: 'your-github-credentials-id', url: 'https://github.com/hamzaamish/Flask-app2.git'
             }
         }
 
@@ -18,9 +18,9 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
-                sshagent(['your-ssh-credentials-id']) {
+                sshagent(['ec2-ssh-key']) {
                     sh '''
-                    ssh -o StrictHostKeyChecking=no ubuntu@<ec2-public-ip> <<EOF
+                    ssh -o StrictHostKeyChecking=no ubuntu@172.31.4.188 <<EOF
                     docker stop my-flask-app || true
                     docker rm my-flask-app || true
                     docker run -d --name my-flask-app -p 5000:5000 my-flask-app:latest
